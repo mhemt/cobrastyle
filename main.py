@@ -7,7 +7,8 @@ def get_runtime() -> LambdaRuntime:
 
 
 def some_handler(event, context):
-    ...
+    print(event)
+    print(context)
 
 
 def main():

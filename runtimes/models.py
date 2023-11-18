@@ -1,6 +1,6 @@
 import time
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 
 @dataclass
@@ -26,9 +26,9 @@ class Invocation:
     aws_request_id: str
     runtime_deadline: int
     invoked_function_arn: str
-    trace_id: Optional[str]
     client_context: ClientContext
     cognito_identity: CognitoIdentity
+    trace_id: str | None = None
 
 
 @dataclass
@@ -46,5 +46,7 @@ class Context:
     identity: CognitoIdentity
     runtime_deadline: int
 
-    def get_remaining_time_in_millis(self) -> int:
+    def get_remaining_time(self) -> int:
+        """Return the remaining time (in milliseconds) before Lambda times out."""
+
         return int(self.runtime_deadline - time.time() * 1000)

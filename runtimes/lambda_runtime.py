@@ -1,3 +1,4 @@
+import traceback
 from typing import Any, Callable
 
 from constants import (
@@ -39,7 +40,8 @@ class LambdaRuntime:
 
             try:
                 lambda_handler(invocation.event, context)
-            except Exception:
+            except Exception:  # TODO: is it possible to get rid of the broad exception?
+                traceback.print_exc()
                 self.client.post_invocation_error(aws_request_id)
             else:
                 self.client.post_invocation_response(aws_request_id)

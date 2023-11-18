@@ -40,14 +40,16 @@ def get_invocation(response: HTTPResponse) -> Invocation:
     runtime_deadline = response.headers['Lambda-Runtime-Deadline-Ms']
     invoked_function_arn = response.headers['Lambda-Runtime-Invoked-Function-Arn']
     trace_id = response.headers.get('Lambda-Runtime-Trace-Id')
-    client_context = json.loads(
-        response.headers.get('Lambda-Runtime-Client-Context'),
-        object_hook=ClientContextJSONDecoder,
-    )
-    cognito_identity = json.loads(
-        response.headers.get('Lambda-Runtime-Cognito-Identity'),
-        object_hook=ClientContextJSONDecoder,
-    )
+
+    if context_value := response.headers.get('Lambda-Runtime-Client-Context'):
+        client_context = json.loads(context_value, object_hook=ClientContextJSONDecoder)
+    else:
+        client_context = None
+
+    if identity_value := response.headers.get('Lambda-Runtime-Cognito-Identity'):
+        cognito_identity = json.loads(identity_value, object_hook=CognitoIdentityJSONDecoder)
+    else:
+        cognito_identity = None
 
     return Invocation(
         event=event,
