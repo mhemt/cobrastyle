@@ -32,15 +32,23 @@ class LambdaRuntime:
         self.client = lambda_client
 
     def run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
+        # Catch all runtime exceptions and let AWS Lambda API know about them
+        try:
+            self._try_run(lambda_handler)
+        except Exception:
+            self.client.post_init_error()
+
+    def _try_run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
         while True:
             invocation = self.client.get_next_invocation()
 
             aws_request_id = invocation.aws_request_id
             context = get_context(invocation, aws_request_id)
 
+            # Catch all handler exceptions and let AWS Lambda API know about them
             try:
                 lambda_handler(invocation.event, context)
-            except Exception:  # TODO: is it possible to get rid of the broad exception?
+            except Exception:
                 traceback.print_exc()
                 self.client.post_invocation_error(aws_request_id)
             else:

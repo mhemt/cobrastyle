@@ -1,5 +1,5 @@
-from clients.lambda_client import LambdaClient
-from runtimes.lambda_runtime import LambdaRuntime
+from clients import LambdaClient
+from runtimes import LambdaRuntime
 
 
 def get_runtime() -> LambdaRuntime:

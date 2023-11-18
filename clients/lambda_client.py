@@ -79,16 +79,12 @@ class LambdaClient(AbstractLambdaClient, BaseLambdaClient):
 
     def post_invocation_error(self, aws_request_id: str) -> HTTPResponse:
         path = f'runtime/invocation/{aws_request_id}/error'
-        data = 'ERROR'.encode('utf-8')
+        data = 'INVOCATION ERROR'.encode('utf-8')
 
         return self._post(path, data)
 
     def post_init_error(self) -> HTTPResponse:
         path = '/runtime/init/error'
-        data = json.dumps({
-            'errorMessage': 'string(text description of the error)',
-            'errorType': 'string',
-            'stackTrace': ['array of strings'],
-        }).encode('utf-8')
+        data = 'INIT ERROR'.encode('utf-8')
 
         return self._post(path, data)
