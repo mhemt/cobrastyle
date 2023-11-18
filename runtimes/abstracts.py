@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from http.client import HTTPResponse
+from typing import Any
 
 from runtimes.models import Invocation
 
@@ -10,7 +11,7 @@ class AbstractLambdaClient(ABC):
         pass
 
     @abstractmethod
-    def post_invocation_response(self, aws_request_id: str) -> HTTPResponse:
+    def post_invocation_response(self, aws_request_id: str, result: Any) -> HTTPResponse:
         pass
 
     @abstractmethod

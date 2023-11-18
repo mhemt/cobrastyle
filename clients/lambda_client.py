@@ -71,9 +71,9 @@ class LambdaClient(AbstractLambdaClient, BaseLambdaClient):
         with self._get(path) as response:
             return get_invocation(response)
 
-    def post_invocation_response(self, aws_request_id: str) -> HTTPResponse:
+    def post_invocation_response(self, aws_request_id: str, result: Any) -> HTTPResponse:
         path = f'runtime/invocation/{aws_request_id}/response'
-        data = 'SUCCESS'.encode('utf-8')
+        data = json.dumps(result).encode('utf-8')
 
         return self._post(path, data)
 

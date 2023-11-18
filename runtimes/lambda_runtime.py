@@ -47,9 +47,9 @@ class LambdaRuntime:
 
             # Catch all handler exceptions and let AWS Lambda API know about them
             try:
-                lambda_handler(invocation.event, context)
+                result = lambda_handler(invocation.event, context)
             except Exception:
                 traceback.print_exc()
                 self.client.post_invocation_error(aws_request_id)
             else:
-                self.client.post_invocation_response(aws_request_id)
+                self.client.post_invocation_response(aws_request_id, result)
