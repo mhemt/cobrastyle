@@ -4,7 +4,7 @@ from typing import Optional
 from urllib.parse import urljoin
 from urllib.request import Request, urlopen
 
-from constants import AWS_LAMBDA_RUNTIME_API
+from cobrastyle.constants import AWS_LAMBDA_RUNTIME_API
 
 
 class APIVersion(Enum):

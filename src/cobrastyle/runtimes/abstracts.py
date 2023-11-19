@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from http.client import HTTPResponse
 from typing import Any
 
-from runtimes.models import Invocation
+from cobrastyle.runtimes.models import Invocation
 
 
 class AbstractLambdaClient(ABC):

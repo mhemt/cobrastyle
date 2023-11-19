@@ -1,5 +1,5 @@
-from clients import LambdaClient
-from runtimes import LambdaRuntime
+from cobrastyle.clients import LambdaClient
+from cobrastyle.runtimes import LambdaRuntime
 
 
 def get_runtime() -> LambdaRuntime:

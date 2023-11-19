@@ -1,15 +1,15 @@
 import traceback
 from typing import Any, Callable
 
-from constants import (
+from cobrastyle.constants import (
     AWS_LAMBDA_FUNCTION_MEMORY_SIZE,
     AWS_LAMBDA_FUNCTION_NAME,
     AWS_LAMBDA_FUNCTION_VERSION,
     AWS_LAMBDA_LOG_GROUP_NAME,
     AWS_LAMBDA_LOG_STREAM_NAME,
 )
-from runtimes.abstracts import AbstractLambdaClient
-from runtimes.models import Context, Invocation
+from cobrastyle.runtimes.abstracts import AbstractLambdaClient
+from cobrastyle.runtimes.models import Context, Invocation
 
 
 def get_context(invocation: Invocation, aws_request_id: str) -> Context:

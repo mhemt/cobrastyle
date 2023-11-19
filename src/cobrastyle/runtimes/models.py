@@ -26,8 +26,8 @@ class Invocation:
     aws_request_id: str
     runtime_deadline: int
     invoked_function_arn: str
-    client_context: ClientContext
-    cognito_identity: CognitoIdentity
+    client_context: ClientContext | None
+    cognito_identity: CognitoIdentity | None
     trace_id: str | None = None
 
 
@@ -39,12 +39,12 @@ class Context:
     function_version: str
     invoked_function_arn: str
     memory_limit_in_mb: int
+    runtime_deadline: int
     aws_request_id: str
     log_group_name: str
     log_stream_name: str
-    client_context: ClientContext
-    identity: CognitoIdentity
-    runtime_deadline: int
+    client_context: ClientContext | None
+    identity: CognitoIdentity | None
 
     def get_remaining_time(self) -> int:
         """Return the remaining time (in milliseconds) before Lambda times out."""

@@ -2,9 +2,9 @@ import json
 from http.client import HTTPResponse
 from typing import Any
 
-from clients.base import BaseLambdaClient
-from runtimes.abstracts import AbstractLambdaClient
-from runtimes.models import ClientContext, CognitoIdentity, Invocation
+from cobrastyle.clients.base import BaseLambdaClient
+from cobrastyle.runtimes.abstracts import AbstractLambdaClient
+from cobrastyle.runtimes.models import ClientContext, CognitoIdentity, Invocation
 
 
 class ClientContextJSONDecoder(json.JSONDecoder):
