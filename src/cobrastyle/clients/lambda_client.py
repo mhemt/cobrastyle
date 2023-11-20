@@ -2,7 +2,7 @@ import json
 from http.client import HTTPResponse
 from typing import Any
 
-from cobrastyle.clients.base import BaseLambdaClient
+from cobrastyle.clients.base import AsyncBaseLambdaClient, BaseLambdaClient
 from cobrastyle.runtimes.abstracts import AbstractLambdaClient
 from cobrastyle.runtimes.models import ClientContext, CognitoIdentity, Invocation
 
@@ -88,3 +88,31 @@ class LambdaClient(AbstractLambdaClient, BaseLambdaClient):
         data = 'INIT ERROR'.encode('utf-8')
 
         return self._post(path, data)
+
+
+class AsyncLambdaClient(AbstractLambdaClient, AsyncBaseLambdaClient):
+    """https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html"""
+
+    async def get_next_invocation(self) -> Invocation:
+        path = 'runtime/invocation/next'
+
+        with await self._get(path) as response:
+            return get_invocation(response)
+
+    async def post_invocation_response(self, aws_request_id: str, result: Any) -> HTTPResponse:
+        path = f'runtime/invocation/{aws_request_id}/response'
+        data = json.dumps(result).encode('utf-8')
+
+        return await self._post(path, data)
+
+    async def post_invocation_error(self, aws_request_id: str) -> HTTPResponse:
+        path = f'runtime/invocation/{aws_request_id}/error'
+        data = 'INVOCATION ERROR'.encode('utf-8')
+
+        return await self._post(path, data)
+
+    async def post_init_error(self) -> HTTPResponse:
+        path = '/runtime/init/error'
+        data = 'INIT ERROR'.encode('utf-8')
+
+        return await self._post(path, data)

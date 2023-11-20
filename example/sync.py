@@ -1,17 +1,20 @@
+from typing import Any
+
 from cobrastyle.clients import LambdaClient
 from cobrastyle.runtimes import LambdaRuntime
+from cobrastyle.runtimes.models import Context
 
 
 def get_runtime() -> LambdaRuntime:
     return LambdaRuntime(lambda_client=LambdaClient())
 
 
-def some_handler(event, context):
+def some_handler(event: dict[str, Any], context: Context) -> None:
     print(event)
     print(context)
 
 
-def main():
+def main() -> None:
     runtime = get_runtime()
     runtime.run(some_handler)
 

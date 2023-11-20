@@ -42,3 +42,31 @@ class BaseLambdaClient:
 
     def _post(self, path: str, data: Optional[bytes] = None) -> HTTPResponse:
         return self._request(path, method=HTTPMethod.POST, data=data)
+
+
+class AsyncBaseLambdaClient:
+    def __init__(
+            self,
+            api_host_port: Optional[str] = None,
+            api_version: APIVersion = APIVersion.V_2018_06_01,
+    ) -> None:
+        api_host_port = api_host_port or AWS_LAMBDA_RUNTIME_API
+        self.api_url = f'http://{api_host_port}/{api_version.value}/'
+
+    async def _request(
+            self,
+            path: str,
+            *,
+            method: HTTPMethod,
+            data: Optional[bytes] = None,
+    ) -> HTTPResponse:
+        url = urljoin(self.api_url, path)
+        request = Request(url, method=method.value, data=data)
+
+        return urlopen(request)
+
+    async def _get(self, path: str) -> HTTPResponse:
+        return await self._request(path, method=HTTPMethod.GET)
+
+    async def _post(self, path: str, data: Optional[bytes] = None) -> HTTPResponse:
+        return await self._request(path, method=HTTPMethod.POST, data=data)

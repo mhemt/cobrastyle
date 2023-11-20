@@ -53,3 +53,31 @@ class LambdaRuntime:
                 self.client.post_invocation_error(aws_request_id)
             else:
                 self.client.post_invocation_response(aws_request_id, result)
+
+
+class AsyncLambdaRuntime:
+    def __init__(self, lambda_client: AbstractLambdaClient) -> None:
+        self.client = lambda_client
+
+    async def run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
+        # Catch all runtime exceptions and let AWS Lambda API know about them
+        try:
+            await self._try_run(lambda_handler)
+        except Exception:
+            await self.client.post_init_error()
+
+    async def _try_run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
+        while True:
+            invocation = await self.client.get_next_invocation()
+
+            aws_request_id = invocation.aws_request_id
+            context = get_context(invocation, aws_request_id)
+
+            # Catch all handler exceptions and let AWS Lambda API know about them
+            try:
+                result = await lambda_handler(invocation.event, context)
+            except Exception:
+                traceback.print_exc()
+                await self.client.post_invocation_error(aws_request_id)
+            else:
+                await self.client.post_invocation_response(aws_request_id, result)
