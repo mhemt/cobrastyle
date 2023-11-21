@@ -1,4 +1,6 @@
+import time
 import traceback
+from threading import Thread
 from typing import Any, Callable
 
 from cobrastyle.constants import (
@@ -27,6 +29,12 @@ def get_context(invocation: Invocation, aws_request_id: str) -> Context:
     )
 
 
+def print_ping():
+    while True:
+        print('ping')
+        time.sleep(1)
+
+
 class LambdaRuntime:
     def __init__(self, lambda_client: AbstractLambdaClient) -> None:
         self.client = lambda_client
@@ -39,6 +47,10 @@ class LambdaRuntime:
             self.client.post_init_error()
 
     def _try_run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
+        thread = Thread(target=print_ping)
+        thread.start()
+        thread.join()
+
         while True:
             print('START WHILE CYCLE')
             invocation = self.client.get_next_invocation()
