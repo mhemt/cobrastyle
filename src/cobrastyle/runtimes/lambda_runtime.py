@@ -47,9 +47,9 @@ class LambdaRuntime:
             self.client.post_init_error()
 
     def _try_run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
+        print('START PING THREAD')
         thread = Thread(target=print_ping)
         thread.start()
-        thread.join()
 
         while True:
             print('START WHILE CYCLE')
