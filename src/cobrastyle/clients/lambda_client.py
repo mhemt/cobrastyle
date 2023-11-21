@@ -35,9 +35,9 @@ class CognitoIdentityJSONDecoder(json.JSONDecoder):
 
 
 def get_invocation(response: HTTPResponse) -> Invocation:
-    print('response headers', response.headers)
-    print('response data', response.read())
     event = json.loads(response.read().decode('utf-8'))
+    print('response headers', response.headers)
+    print('response data', event)
     aws_request_id = response.headers['Lambda-Runtime-Aws-Request-Id']
     runtime_deadline = response.headers['Lambda-Runtime-Deadline-Ms']
     invoked_function_arn = response.headers['Lambda-Runtime-Invoked-Function-Arn']

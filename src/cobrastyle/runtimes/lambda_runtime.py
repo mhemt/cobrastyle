@@ -40,13 +40,15 @@ class LambdaRuntime:
 
     def _try_run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
         while True:
+            print('START WHILE CYCLE')
             invocation = self.client.get_next_invocation()
-
+            print('INVOCATION RECEIVED')
             aws_request_id = invocation.aws_request_id
             context = get_context(invocation, aws_request_id)
 
             # Catch all handler exceptions and let AWS Lambda API know about them
             try:
+                print('START EVENT HANDLING')
                 result = lambda_handler(invocation.event, context)
             except Exception:
                 traceback.print_exc()
