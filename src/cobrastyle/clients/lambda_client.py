@@ -63,8 +63,6 @@ def get_invocation(response: HTTPResponse) -> Invocation:
 
 
 class LambdaClient(AbstractLambdaClient, BaseLambdaClient):
-    """https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html"""
-
     def get_next_invocation(self) -> Invocation:
         path = 'runtime/invocation/next'
 
@@ -91,8 +89,6 @@ class LambdaClient(AbstractLambdaClient, BaseLambdaClient):
 
 
 class AsyncLambdaClient(AbstractLambdaClient, AsyncBaseLambdaClient):
-    """https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html"""
-
     async def get_next_invocation(self) -> Invocation:
         path = 'runtime/invocation/next'
 
