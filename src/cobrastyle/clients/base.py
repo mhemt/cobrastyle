@@ -35,7 +35,7 @@ class BaseLambdaClient:
         url = urljoin(self.api_url, path)
         request = Request(url, method=method.value, data=data)
         print(f'REQUEST {method.value} SENT')
-        response = urlopen(request, timeout=10)
+        response = urlopen(request)
         print(f'RESPONSE {response.status} RECEIVED')
         return response
 

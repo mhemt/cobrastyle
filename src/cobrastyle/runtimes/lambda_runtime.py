@@ -30,9 +30,11 @@ def get_context(invocation: Invocation, aws_request_id: str) -> Context:
 
 
 def print_ping():
+    counter = 0
     while True:
-        print('ping')
-        time.sleep(0.1)
+        counter += 1
+        print('ping', counter)
+        time.sleep(1)
 
 
 class LambdaRuntime:
