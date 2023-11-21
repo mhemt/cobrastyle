@@ -63,7 +63,7 @@ class AsyncBaseLambdaClient:
         url = urljoin(self.api_url, path)
         request = Request(url, method=method.value, data=data)
 
-        return urlopen(request)
+        return urlopen(request, timeout=10)
 
     async def _get(self, path: str) -> HTTPResponse:
         return await self._request(path, method=HTTPMethod.GET)
