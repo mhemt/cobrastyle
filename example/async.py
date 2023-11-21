@@ -1,8 +1,8 @@
 import asyncio
 
 from cobrastyle.clients import AsyncLambdaClient
+from cobrastyle.models import Context
 from cobrastyle.runtimes import AsyncLambdaRuntime
-from cobrastyle.runtimes.models import Context
 from cobrastyle.typing import Event
 
 

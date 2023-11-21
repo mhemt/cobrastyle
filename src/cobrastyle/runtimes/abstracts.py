@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from http.client import HTTPResponse
 from typing import Any, Callable
 
-from cobrastyle.runtimes.models import Context, Invocation
+from cobrastyle.models import Context, Invocation
 from cobrastyle.typing import Event
 
 

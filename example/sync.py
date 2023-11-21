@@ -1,6 +1,6 @@
 from cobrastyle.clients import LambdaClient
+from cobrastyle.models import Context
 from cobrastyle.runtimes import LambdaRuntime
-from cobrastyle.runtimes.models import Context
 from cobrastyle.typing import Event
 
 

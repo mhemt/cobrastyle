@@ -3,8 +3,8 @@ from http.client import HTTPResponse
 from typing import Any
 
 from cobrastyle.clients.base import AsyncBaseLambdaClient, BaseLambdaClient
+from cobrastyle.models import ClientContext, CognitoIdentity, Invocation
 from cobrastyle.runtimes.abstracts import AbstractLambdaClient
-from cobrastyle.runtimes.models import ClientContext, CognitoIdentity, Invocation
 from cobrastyle.typing import Event
 
 

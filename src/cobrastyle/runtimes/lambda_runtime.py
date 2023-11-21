@@ -8,8 +8,8 @@ from cobrastyle.constants import (
     AWS_LAMBDA_LOG_GROUP_NAME,
     AWS_LAMBDA_LOG_STREAM_NAME,
 )
+from cobrastyle.models import Context, Invocation
 from cobrastyle.runtimes.abstracts import AbstractLambdaClient, AbstractLambdaRuntime
-from cobrastyle.runtimes.models import Context, Invocation
 from cobrastyle.typing import Event
 
 
