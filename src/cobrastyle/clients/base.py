@@ -34,8 +34,10 @@ class BaseLambdaClient:
     ) -> HTTPResponse:
         url = urljoin(self.api_url, path)
         request = Request(url, method=method.value, data=data)
-
-        return urlopen(request)
+        print(f'REQUEST {method.value} SENT')
+        response = urlopen(request, timeout=10)
+        print(f'RESPONSE {response.status} RECEIVED')
+        return response
 
     def _get(self, path: str) -> HTTPResponse:
         return self._request(path, method=HTTPMethod.GET)
@@ -63,7 +65,7 @@ class AsyncBaseLambdaClient:
         url = urljoin(self.api_url, path)
         request = Request(url, method=method.value, data=data)
 
-        return urlopen(request, timeout=10)
+        return urlopen(request)
 
     async def _get(self, path: str) -> HTTPResponse:
         return await self._request(path, method=HTTPMethod.GET)
