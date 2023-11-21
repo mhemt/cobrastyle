@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from http.client import HTTPResponse
-from typing import Any
+from typing import Any, Callable
 
-from cobrastyle.runtimes.models import Invocation
+from cobrastyle.runtimes.models import Context, Invocation
+from cobrastyle.typing import Event
 
 
 class AbstractLambdaClient(ABC):
@@ -17,7 +18,7 @@ class AbstractLambdaClient(ABC):
         Request an invocation event.
         https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html#runtimes-api-next
 
-        Returns:
+        Return:
             An Invocation object.
         """
         pass
@@ -28,9 +29,9 @@ class AbstractLambdaClient(ABC):
         Send an invocation response to Lambda.
         https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html#runtimes-api-response
 
-        Params:
-            aws_request_id:
-            result:
+        Args:
+            aws_request_id: the identifier of the invocation request.
+            result: a lambda handler return value that can be JSON-serialized.
         Return:
             A HTTPResponse object.
         """
@@ -41,6 +42,11 @@ class AbstractLambdaClient(ABC):
         """
         Report an invocation error to Lambda.
         https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html#runtimes-api-initerror
+
+        Args:
+            aws_request_id: the identifier of the invocation request.
+        Return:
+            A HTTPResponse object.
         """
         pass
 
@@ -49,5 +55,22 @@ class AbstractLambdaClient(ABC):
         """
         Report an initialization error to Lambda.
         https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html#runtimes-api-invokeerror
+
+        Return:
+            A HTTPResponse object.
+        """
+        pass
+
+
+class AbstractLambdaRuntime(ABC):
+    """A runtime that manages a Lambda client and a Lambda handler."""
+
+    @abstractmethod
+    def run(self, lambda_handler: Callable[[Event, Context], Any]) -> None:
+        """
+        Receive an event, execute a Lambda handler, and report an execution result.
+
+        Args:
+            lambda_handler: a handler function to execute.
         """
         pass

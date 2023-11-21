@@ -5,6 +5,7 @@ from typing import Any
 from cobrastyle.clients.base import AsyncBaseLambdaClient, BaseLambdaClient
 from cobrastyle.runtimes.abstracts import AbstractLambdaClient
 from cobrastyle.runtimes.models import ClientContext, CognitoIdentity, Invocation
+from cobrastyle.typing import Event
 
 
 class ClientContextJSONDecoder(json.JSONDecoder):
@@ -35,7 +36,7 @@ class CognitoIdentityJSONDecoder(json.JSONDecoder):
 
 
 def get_invocation(response: HTTPResponse) -> Invocation:
-    event = json.loads(response.read().decode('utf-8'))
+    event: Event = json.loads(response.read().decode('utf-8'))
     aws_request_id = response.headers['Lambda-Runtime-Aws-Request-Id']
     runtime_deadline = response.headers['Lambda-Runtime-Deadline-Ms']
     invoked_function_arn = response.headers['Lambda-Runtime-Invoked-Function-Arn']

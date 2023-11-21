@@ -1,16 +1,16 @@
 import asyncio
-from typing import Any
 
 from cobrastyle.clients import AsyncLambdaClient
 from cobrastyle.runtimes import AsyncLambdaRuntime
 from cobrastyle.runtimes.models import Context
+from cobrastyle.typing import Event
 
 
 def get_runtime() -> AsyncLambdaRuntime:
     return AsyncLambdaRuntime(lambda_client=AsyncLambdaClient())
 
 
-async def some_handler(event: dict[str, Any], context: Context) -> None:
+async def some_handler(event: Event, context: Context) -> None:
     print(event)
     print(context)
 

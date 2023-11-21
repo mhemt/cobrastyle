@@ -8,8 +8,9 @@ from cobrastyle.constants import (
     AWS_LAMBDA_LOG_GROUP_NAME,
     AWS_LAMBDA_LOG_STREAM_NAME,
 )
-from cobrastyle.runtimes.abstracts import AbstractLambdaClient
+from cobrastyle.runtimes.abstracts import AbstractLambdaClient, AbstractLambdaRuntime
 from cobrastyle.runtimes.models import Context, Invocation
+from cobrastyle.typing import Event
 
 
 def get_context(invocation: Invocation, aws_request_id: str) -> Context:
@@ -23,22 +24,22 @@ def get_context(invocation: Invocation, aws_request_id: str) -> Context:
         log_stream_name=AWS_LAMBDA_LOG_STREAM_NAME,
         client_context=invocation.client_context,
         identity=invocation.cognito_identity,
-        runtime_deadline=invocation.runtime_deadline,
+        _runtime_deadline=invocation.runtime_deadline,
     )
 
 
-class LambdaRuntime:
+class LambdaRuntime(AbstractLambdaRuntime):
     def __init__(self, lambda_client: AbstractLambdaClient) -> None:
         self.client = lambda_client
 
-    def run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
+    def run(self, lambda_handler: Callable[[Event, Context], Any]) -> None:
         # Catch all runtime exceptions and let AWS Lambda API know about them
         try:
             self._try_run(lambda_handler)
         except Exception:
             self.client.post_init_error()
 
-    def _try_run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
+    def _try_run(self, lambda_handler: Callable[[Event, Context], Any]) -> None:
         while True:
             invocation = self.client.get_next_invocation()
 
@@ -55,18 +56,18 @@ class LambdaRuntime:
                 self.client.post_invocation_response(aws_request_id, result)
 
 
-class AsyncLambdaRuntime:
+class AsyncLambdaRuntime(AbstractLambdaRuntime):
     def __init__(self, lambda_client: AbstractLambdaClient) -> None:
         self.client = lambda_client
 
-    async def run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
+    async def run(self, lambda_handler: Callable[[Event, Context], Any]) -> None:
         # Catch all runtime exceptions and let AWS Lambda API know about them
         try:
             await self._try_run(lambda_handler)
         except Exception:
             await self.client.post_init_error()
 
-    async def _try_run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
+    async def _try_run(self, lambda_handler: Callable[[Event, Context], Any]) -> None:
         while True:
             invocation = await self.client.get_next_invocation()
 
