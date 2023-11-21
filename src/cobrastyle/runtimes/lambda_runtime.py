@@ -44,7 +44,8 @@ class LambdaRuntime:
         try:
             self._try_run(lambda_handler)
         except Exception:
-            self.client.post_init_error()
+            print('EXCEPTION')
+            # self.client.post_init_error()
 
     def _try_run(self, lambda_handler: Callable[[dict[str, Any], Context], Any]) -> None:
         print('START PING THREAD')
